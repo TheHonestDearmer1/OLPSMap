@@ -32,27 +32,41 @@
         lat: 40.01116
     }
     const newstart = () =>{
-        axios.get('/demo',{
+        axios.get('http://127.0.0.1:5000/action',{
             params:{
                 origin:locationStart.lat+','+locationStart.lng,
                 destination:locationEnd.lat+','+locationEnd.lng,
                 ak:'Buvb6KrY687IiA3RDVKsOa9bUNyQdpj1'
             },
             headers:{
-                'ccess-Control-Allow-Origin':'*'
+                'Access-Control-Allow-Origin':'*',
+                'Content-Type': 'application/json'
             }
         }).then((resp)=>{
             console.log(resp);
-           if(resp.data.status == '0'){
-            path.push(...resp.data.steps[0].path)
+           if(resp.data.status == '0'){    
+           const DataList = resp.data.result.routes[0].steps
+            DataList.forEach(element => {
+                const subDataList = (element.path).split(";");
+                subDataList.forEach((subelement)=>{
+                 const subData = subelement.split(",")
+                 const EndData = {
+                    lng: subData[0],
+                    lat: subData[1]
+                 }
+                 path.push(EndData)
+                 console.log(EndData);
+                })
+            });
+            console.log(path);
+            setPath(path)
+            start()
            }else{
             console.log(resp.data.message);
            }
         }).catch((err)=>{
             alert(err)
         })
-        setPath(path)
-        start()
     }
     const locationEnd = {
         lng: 116.452562,

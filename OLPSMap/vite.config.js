@@ -5,8 +5,8 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
      proxy: { 
-      '/demo': {
-       target: "https://api.map.baidu.com/directionlite/v1/driving",
+      '/axios': {
+       target: "http://127.0.0.1:5000",
        changeOrigin: true,
        rewrite: (path) => path.replace(/^\/demo/, '')
       }
